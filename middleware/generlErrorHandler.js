@@ -6,11 +6,15 @@ function createNewErrorObj(err) {
   if (!statusCode) {
     statusCode = 500;
   }
+  if (!err.message) {
+    err.message = "Someting went wrong!";
+  }
   const newErr = new ErrorModel(err.message, statusCode, "error");
   return newErr;
 }
 //Catch error and send them.
 export function errhandlerGeneral(err, req, res, next) {
+  console.log(err);
   // res.status(500).json({ err: err.message });
   const errHandler = createNewErrorObj(err);
   res.status(errHandler.obj.status_code).json(errHandler.obj);
