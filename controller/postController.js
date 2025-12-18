@@ -5,8 +5,10 @@ export function getPostByAuthorId(req, res, next) {
   // console.log(authorId);
   try {
     //Convert id to number otherwise it will reuturn nothing.
-    return res.json(postAuthorById(Number(authorId)));
-  } catch (err) {
-    next(err);
+    const postResult = postAuthorById(Number(authorId));
+    // console.log(postAuthorById(Number(authorId)));
+    res.json(postResult);
+  } catch (error) {
+    next(error);
   }
 }

@@ -1,8 +1,3 @@
-// const fdb = import("../model/fakeDB.json", {
-//   with: {
-//     type: "json",
-//   },
-// });
 import fdb from "../model/fakeDB.json" with { type: "json" };
 import { contentToHash as hashPassword } from "../service/hashService.js";
 
@@ -10,41 +5,46 @@ import { contentToHash as hashPassword } from "../service/hashService.js";
 
 //Get the password by username. WARNNING:Use as internale function.
 function getPasswordByName(username) {
-  return fdb.users.find((u) => u.username === username).password;
+  try {
+    return fdb.users.find((u) => u.username === username).password;
+  } catch (error) {
+    throw error;
+  }
 }
 
 //Exported functions
 
 //Check username
 export function checkUsername(username) {
-  const result = username
-    ? fdb.users.find((user) => user.username === username)
-    : new Error("User is not exists");
-
+  const result = fdb.users.find((user) => user.username === username);
+  if (!result) throw new Error("Can't find user.");
   return result;
 }
 
 //Return hash password
 export async function getHashPasswordByName(username) {
   const hash = await hashPassword(getHashPasswordByName(username));
-  if (!hash) return new Error("Fail to get hash password!");
+  if (!hash) throw new Error("Fail to get hash password!");
 
   return hash;
 }
 //Get the user bio by their ID.
 export function bioById(id) {
-  const result = id
-    ? fdb.bios.find((bio) => bio.userID === id)
-    : new Error("User id required!");
+  //   const result = id
+  //     ? fdb.bios.find((bio) => bio.userID === id)
+  //     : new Error("User id required!");
+
+  //   return result;
+  const result = fdb.bios.find((b) => b.userID === id);
+  if (!result)
+    throw new Error("Can't find a bio due to wrong id or non-exists.");
 
   return result;
 }
 
 //Get Post by user author ID
 export function postAuthorById(id) {
-  // const post = db.posts.find((p) => p.authorID === id).content;
-  // const post = fdb.posts.find((p) => p.authorID === id);
   const post = fdb.posts.find((p) => p.authorID === id);
-  if (!post) return new Error("Can't find post");
+  if (!post) throw new Error("Can't find post");
   return post;
 }

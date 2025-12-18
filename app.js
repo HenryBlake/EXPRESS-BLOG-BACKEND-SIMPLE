@@ -14,10 +14,10 @@ app.get("/", (req, res) => {
 // app.use("/newTE", getTestError);
 
 //Test error happend
-app.get("/testerr", (req, res) => {
-  res.status(404);
-  throw new Error("this is a test error. Do not be panic.");
-});
+// app.get("/testerr", (req, res) => {
+//   res.status(404);
+//   throw new Error("this is a test error. Do not be panic.");
+// });
 app.use("/post", postRouter.default);
 //Error handler
 // app.use(errHandler.simpleErrOutput);
