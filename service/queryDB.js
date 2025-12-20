@@ -1,9 +1,9 @@
-import fdb from "../model/fakeDB.json" with { type: "json" };
-import { contentToHash as hashPassword } from "../service/hashService.js";
+import fdb from "../model/fakeDB.json" with {type: "json"};
+import {contentToHash as hashPassword} from "../service/hashService.js";
 
 //Internal functions
 
-//Get the password by username. WARNNING:Use as internale function.
+//Get the password by username. WARNING:Use as internal function.
 function getPasswordByName(username) {
   try {
     return fdb.users.find((u) => u.username === username).password;
@@ -20,14 +20,18 @@ export function checkUsername(username) {
   if (!result) throw new Error("Can't find user.");
   return result;
 }
+//Check user ID
+export function checkUserId(userid){
+  const result = fdb.users.find((u) => u.id === userid);
+  if (!result) throw new Error("Can't find user.");
+  return result;
+}
 
 //Return hash password
 export async function getHashPasswordByName(username) {
-  const hash = await hashPassword(getHashPasswordByName(username));
-  if (!hash) throw new Error("Fail to get hash password!");
-
-  return hash;
+  return await hashPassword(getHashPasswordByName(username));
 }
+
 //Get the user bio by their ID.
 export function bioById(id) {
   //   const result = id
@@ -35,7 +39,7 @@ export function bioById(id) {
   //     : new Error("User id required!");
 
   //   return result;
-  const result = fdb.bios.find((b) => b.userID === id);
+  const result = fdb.bios.find((b) => b.id === id);
   if (!result)
     throw new Error("Can't find a bio due to wrong id or non-exists.");
 
@@ -47,4 +51,8 @@ export function postAuthorById(id) {
   const post = fdb.posts.find((p) => p.authorID === id);
   if (!post) throw new Error("Can't find post");
   return post;
+}
+
+export function getIdByName(username) {
+  return fdb.users.find((u) => u.username === username).id;
 }

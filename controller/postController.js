@@ -4,7 +4,7 @@ export function getPostByAuthorId(req, res, next) {
   const authorId = req.params.id;
   // console.log(authorId);
   try {
-    //Convert id to number otherwise it will reuturn nothing.
+    //Convert id to number otherwise it will return nothing.
     const postResult = postAuthorById(Number(authorId));
     // console.log(postAuthorById(Number(authorId)));
     res.json(postResult);
