@@ -19,5 +19,5 @@ router.post("/post-new-post",postNewPost, (err,next) => {
     next(err);
   }
 })
-
+//Delete post by post id
 export default router;
