@@ -17,11 +17,14 @@ function getHashPassword(id){
 //Update the user's name.
 export function updateUserName(userId,newUsername){
     db.exec(`UPDATE users SET username=${newUsername} WHERE id=${userId}`)
+    return {"message":"Username updated successfully.","new username":newUsername};
 }
 
 //Update the password of user.
 export function updatePassword(userId,newPassword){
     db.exec(`UPDATE users SET password=${newPassword} WHERE id=${userId}`)
+    return {"message":"Password updated successfully.","new password":newPassword};
+
 }
 
 //Insert new user into db
@@ -48,19 +51,4 @@ export function checkUsername(userName){
     if(result.toString().toLocaleLowerCase()===userName.toLocaleLowerCase()){
         throw new Error("User already exists")
     }
-}
-
-//User check
-export function userCheck(id,password){
-    let hashPassword=getHashPassword(id);
-    let passCheck=comparePassAndHash(password,hashPassword);
-    if(!passCheck){
-        throw new Error("Wrong password")
-    }
-    return passCheck;
-}
-
-//TODO:Finish the function that compare the password.
-//Compare password.
-export function checkPassword(password){
 }

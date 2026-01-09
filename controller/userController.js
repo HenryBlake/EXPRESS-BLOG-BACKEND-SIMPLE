@@ -1,5 +1,5 @@
 // import * as dbQuery from "../service/queryDB.js";
-import {getUserById,insertNewUserToDB,userCheck} from "../service/userQuery.js";
+import {getUserById,insertNewUserToDB,updatePassword,updateUserName} from "../service/userQuery.js";
 import {contentToHash} from "../service/hashService.js";
 import {signToken,verifyToken} from "../service/jwtAuth.js";
 
@@ -28,21 +28,23 @@ export function createNewUser(req,res,next){
       next(err)
    }
 }
-
-export function logInUser(req,res,next){
-   const [id,password]=req.body;
-   let username;
-
-   let isExist=userCheck(id,password);
-   if(!isExist||isExist!==true){
-      res.status(401).send({"message":"User not found or password is incorrect.",})
-   }
+//To change the username.
+export function changeUsername(req,res,next){
+   let [id,newName]=req.body;
    try{
-       username=getUserById(id)
+     let result= updateUserName(id,newName)
+      res.json(result)
    }catch (err){
       next(err)
    }
-   // verifyToken({id:id,username:username})
-   // signToken({id:id,username:username})
-   return res.status(200).send({"message":"User logged in",})
+}
+//To change password
+export function changePassword(req,res,next){
+   let [id,newPassword]=req.body;
+   try{
+      let result=updatePassword(id,newPassword)
+      res.json(result)
+   }catch (err){
+      next(err)
+   }
 }
