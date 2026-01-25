@@ -18,7 +18,7 @@ export function selectUsernameById(id){
     return raw.get(id)
 }
 //This function will get the user's password for credential. DO NOT call for other purpose.
-export function getHashPassword(id){
+export function selectHashPassword(id){
     let raw=db.prepare('SELECT password FROM users WHERE id=?');
     return raw.get(id)
 }

@@ -4,7 +4,7 @@ import {
    updatePassword,
    updateUserName,
    updateRole,
-   selectUsernameById
+   selectUsernameById, selectHashPassword
 } from "../service/userQuery.js";
 import {contentToHash,comparePassAndHash} from "../service/hashService.js";
 import {getUUID} from "../service/uuidService.js";
@@ -42,17 +42,12 @@ export function userLogin(req, res,next){
    let passwordIsMatch;
    let hashedPassword;
    let token={}
-   try{
-    isExists=checkUsername(username);
-   }
-   catch(err){
-      next(err);
-   }
+
    if(isExists!==true){
       res.status(400).send({"error":"No username exist"});
    }
    try{
-      hashedPassword= getPasswordByUsername(username);
+      hashedPassword= selectHashPassword(username);
       if(!hashedPassword){
          new Error("Passwords don't match");
       }
@@ -101,8 +96,8 @@ export function createNewUser(req,res,next){
 export function changeUsername(req,res,next){
    let [id,newName]=req.body;
    try{
-     let result= updateUserName(id,newName)
-      res.json(result)
+      updateUserName(id,newName)
+      res.json({message:"Username changed successfully.",code:200})
    }catch (err){
       next(err)
    }
@@ -111,8 +106,8 @@ export function changeUsername(req,res,next){
 export function changePassword(req,res,next){
    let [id,newPassword]=req.body;
    try{
-      let result=updatePassword(id,newPassword)
-      res.json(result)
+      updatePassword(id,newPassword)
+      res.json({message:"Password changed successfully.",code:200})
    }catch (err){
       next(err)
    }

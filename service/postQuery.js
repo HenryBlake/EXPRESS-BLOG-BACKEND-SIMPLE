@@ -2,14 +2,26 @@ import getDB  from "./sqliteDB.js"
 const db = getDB();
 
 //Get the post by author ID
-export function readPostByAuthorId(authorId){
-  const raw= db.prepare(`SELECT * FROM posts WHERE author_id ==${authorId}`);
-  return raw.all();
+export function selectPostByAuthorId(authorId){
+  // const raw= db.prepare(`SELECT * FROM posts WHERE author_id ==${authorId}`);
+  // return raw.all();
+    const raw=db.prepare('SELECT * FROM posts WHERE authorId = ?');
+    return raw.get(authorId)
 }
 
-export function readPostById(id) {
-    const raw = db.prepare(`SELECT * FROM posts WHERE id = ${id}`);
-    return raw.all();
+export function selectPostById(id) {
+    // const raw = db.prepare(`SELECT * FROM posts WHERE id = ${id}`);
+    // return raw.all();
+    const raw=db.prepare('SELECT * FROM posts WHERE id = ?');
+    return raw.get(id);
+}
+
+export function selectPostByView(view){
+
+}
+
+export function selectPostByLike(like){
+
 }
 
 //Update the post

@@ -1,22 +1,30 @@
 // import { postAuthorById } from "../service/queryDB.js";
 import ErrorModel from "../model/ErrorModel.js";
 // import {addNewPost} from "../service/postQuery.js";
-import {readPostByAuthorId,updatePost,newPostToDB,deleteByAuthorId,deleteByPostId} from "../service/postQuery.js";
+import {selectPostByAuthorId,updatePost,newPostToDB,deleteByAuthorId,deleteByPostId} from "../service/postQuery.js";
 import {getUUID} from "../service/uuidService.js";
 import {raw} from "express";
 
 //Get the post
-export function getPostByAuthorId(req, res, next) {
-  const authorId = req.params.id;
-  // console.log(authorId);
-  try {
-    //Convert id to number otherwise it will return nothing.
-    const postResult = readPostByAuthorId(Number(authorId));
-    // console.log(postAuthorById(Number(authorId)));
-    res.json(postResult);
-  } catch (error) {
-    next(error);
+export function getPosts(req, res, next) {
+  let [id,authorId,views,likes]=req.query;
+  let result={}
+  //Each one represents one function.
+  if(id){
+
   }
+  if(authorId){
+
+  }
+  if(views){
+
+  }
+
+  if(likes){
+
+  }
+
+  res.json(result)
 }
 
 
