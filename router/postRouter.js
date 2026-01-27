@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.status(200).json({ message: "Here is post endpoint." });
 });
-router.get("/:id", getPosts, (err, next) => {
+router.get("/posts", getPosts, (err, next) => {
   if (err) {
     err.status = 404;
     next(err);

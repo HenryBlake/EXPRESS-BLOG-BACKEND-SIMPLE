@@ -7,23 +7,26 @@ import {raw} from "express";
 
 //Get the post
 export function getPosts(req, res, next) {
-  let [id,authorId,views,likes]=req.query;
+  let {id,authorId,views,likes}=req.query;
   let result={}
   //Each one represents one function.
+  //TODO:The function will return a whole post by post id.
   if(id){
 
   }
+  //TODO: Query by author id.
   if(authorId){
 
   }
+  //TODO :Sort by views and take the limitations.
   if(views){
 
   }
-
+  //TODO: Sort by Likes and take the limitations.
   if(likes){
 
   }
-
+  //Combine and output the result.
   res.json(result)
 }
 

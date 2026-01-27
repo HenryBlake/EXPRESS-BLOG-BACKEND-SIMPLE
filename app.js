@@ -7,6 +7,7 @@ const port = 3101;
 import { errhandlerGeneral } from "./middleware/generlErrorHandler.js";
 import * as postRouter from "./router/postRouter.js";
 import * as userRouter from "./router/userRouter.js";
+import testRouter from "./router/testRouter.js";
 
 
 //Make sure it could handle JSON format in right way.
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 //Here are the all routers.
 app.use("/users",userRouter.default)
 app.use("/posts", postRouter.default);
+app.use("/test",testRouter);
 
 
 
