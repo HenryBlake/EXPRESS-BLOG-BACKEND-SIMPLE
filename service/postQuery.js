@@ -3,25 +3,23 @@ const db = getDB();
 
 //Get the post by author ID
 export function selectPostByAuthorId(authorId){
-  // const raw= db.prepare(`SELECT * FROM posts WHERE author_id ==${authorId}`);
-  // return raw.all();
     const raw=db.prepare('SELECT * FROM posts WHERE author_id = ?');
     return raw.get(authorId)
 }
 
 export function selectPostById(id) {
-    // const raw = db.prepare(`SELECT * FROM posts WHERE id = ${id}`);
-    // return raw.all();
     const raw=db.prepare('SELECT * FROM posts WHERE id = ?');
     return raw.get(id);
 }
 
-export function orderPostByView(views){
-
+export function orderPostByAndSelectById(sort,id) {
+    const raw=db.prepare('SELECT * FROM posts WHERE id=? ORDER BY ? LIMIT 20 ASC');
+    return raw.get(id,sort);
 }
 
-export function orderPostByLike(likes){
-
+export function orderPostByAndSelectByAuthorId(sort,authorId){
+    const raw=db.prepare('SELECT * FROM posts WHERE author_id=? ORDER BY ? LIMIT 20 ASC');
+    return raw.get(authorId,sort);
 }
 
 //Update the post

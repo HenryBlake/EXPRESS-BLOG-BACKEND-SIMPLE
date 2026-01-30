@@ -1,13 +1,10 @@
-// import { postAuthorById } from "../service/queryDB.js";
-import ErrorModel from "../model/ErrorModel.js";
-// import {addNewPost} from "../service/postQuery.js";
 import {
   selectPostByAuthorId,
   updatePost,
   newPostToDB,
   deleteByAuthorId,
   deleteByPostId,
-  selectPostById
+  selectPostById, orderPostBy, orderPostByAndSelectById, orderPostByAndSelectByAuthorId
 } from "../service/postQuery.js";
 import {getUUID} from "../service/uuidService.js";
 import {raw} from "express";
@@ -15,7 +12,6 @@ import {raw} from "express";
 //Get the post
 export function getPosts(req, res, next) {
   let {id,authorId,sort}=req.query;
-  let result={posts:[]}
 
   if(id && authorId){
       res.json({message:"You can only pick one parameter from id and authorId",
@@ -24,33 +20,42 @@ export function getPosts(req, res, next) {
   }
   //Each one represents one function.
   if(id){
+
+    if(sort){
+      try{
+        let result =orderPostByAndSelectById(sort,id)
+        res.json(result)
+      }catch(err){
+        next(err);
+      }
+    }
+
     try{
-      let raw=selectPostById(id.toString())
-      result.posts.push(raw)
+      let result=selectPostById(id.toString())
+      res.json(result)
     }catch(err){
       next(err);
     }
   }
-  //TODO: Query by author id.
   if(authorId){
+
+    if(sort){
+      try{
+        let result=orderPostByAndSelectByAuthorId(sort,authorId)
+        res.json(result)
+      }catch(err){
+        next(err);
+      }
+    }
+
     try{
-      let raw=selectPostByAuthorId(Number(authorId))
-      result.posts.push(raw)
+      let result=selectPostByAuthorId(authorId)
+      res.json(result)
     }catch(err){
       next(err);
     }
   }
-//They both perform a sort order in ascending order
-  if(sort && sort==="likes"){
 
-  }
-
-  if(sort && sort==="views"){
-
-
-  }
-  //Combine and output the result.
-  res.json(result)
 }
 
 
