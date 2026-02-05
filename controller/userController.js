@@ -11,7 +11,7 @@ import {getUUID} from "../service/uuidService.js";
 import {signToken,verifyToken} from "../service/jwtAuth.js";
 
 //TODO: Make sure it can use request query as posts do. REMINDER: Do not expose the password
-export function getUser(req,res,next){
+export function getUsers(req,res,next){
    let {id,username}=req.query;
 
    if(id&&username){

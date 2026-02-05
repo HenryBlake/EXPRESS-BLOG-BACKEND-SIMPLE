@@ -8,6 +8,7 @@ import {
 } from "../service/postQuery.js";
 import {getUUID} from "../service/uuidService.js";
 import {raw} from "express";
+import jwt from "jsonwebtoken";
 
 //Get the post
 export function getPosts(req, res, next) {
@@ -58,17 +59,22 @@ export function getPosts(req, res, next) {
 
 }
 
-
+//TODO:Make sure the rest functions can use query and pass the authentication.
 //Post new post
 export function postNewPost(req, res, next) {
   let rawPost =req.body;
+  // let header=req.headers.authorization
+  // let raw=header.split(' ')[1]
+  //
+  // let localId=jwt.decode(raw).id;
+  let localId=req.user.id;
   let post={
     id:getUUID(),
     title:rawPost.title,
     content:rawPost.content,
     views:0,
     likes:0,
-    authorID: rawPost.authorID,
+    authorID: localId,
     createDate:''
   }
 
@@ -78,7 +84,7 @@ export function postNewPost(req, res, next) {
     return res.status(400).send({error: "Post not found"});
   }
   try{
-    newPostToDB(rawPost.authorID,post);
+    newPostToDB(localId,post);
     res.json({message: "Post added"});
   }catch(err){
     next(err);
