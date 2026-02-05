@@ -94,8 +94,20 @@ export function postNewPost(req, res, next) {
 export function updatePostContent(req, res, next) {
   const body = req.body;
   const id=req.body.id
+  const authorId=req.user.id;
+  let authorIdServer;
   if (!body) {
-    return res.status(400).send({error: "Post not found"});
+    return res.status(400).send({error: "No post provided"});
+  }
+  //Verify it is your post not somebody else's.
+  try{
+    const raw=selectPostById(id.toString())
+    authorIdServer=raw.authorID.toString()
+  }catch(err){
+    next(err);
+  }
+  if(authorIdServer!==authorId){
+    return res.status(400).json({error: "Unmatched authorId"});
   }
   try{
     updatePost(id,body)
@@ -106,9 +118,19 @@ export function updatePostContent(req, res, next) {
 }
 //Delete by post id
 export function deletePostByPostId(req, res, next) {
-  const id =req.params.id;
+  let postId=req.query.id
+  let userId = req.user.id;
+  if(!postId){
+    res.json(({
+      title:"How to delete this post?",
+      content:"Use query parameters to input the post you want to delete",
+      type:"guide"
+    }))
+  }
+
+
   try{
-    deleteByPostId(id)
+    deleteByPostId(postId)
     res.json({message: "Post deleted"});
   }catch(err){
     next(err);
