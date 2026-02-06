@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {queryTest} from "../controller/testController.js";
 import {jwtAuthentication} from "../middleware/jwtAuhMiddleware.js";
+import authorizationMiddleware from "../middleware/authorizationMiddleware.js";
 const router = Router();
 
 router.use(jwtAuthentication)
@@ -12,7 +13,7 @@ router.get('/',(req,res,next)=>{
 }
 )
 
-router.get('/query-test',queryTest,(next,err)=>{
+router.get('/query-test',authorizationMiddleware,queryTest,(next,err)=>{
     if(err){
         next(err)
     }

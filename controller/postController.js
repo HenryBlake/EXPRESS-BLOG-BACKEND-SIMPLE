@@ -4,7 +4,7 @@ import {
   newPostToDB,
   deleteByAuthorId,
   deleteByPostId,
-  selectPostById, orderPostByAndSelectById, orderPostByAndSelectByAuthorId
+  selectPostById, orderPostByAndSelectByAuthorId, orderPostsBy, selectAuthorIdFromPost
 } from "../service/postQuery.js";
 import {getUUID} from "../service/uuidService.js";
 import {raw} from "express";
@@ -12,27 +12,22 @@ import jwt from "jsonwebtoken";
 
 //Get the post
 export function getPosts(req, res, next) {
-  let {id,authorId,sort}=req.query;
+  let {postId,authorId,sort}=req.query;
 
-  if(id && authorId){
+  if(postId && authorId){
       res.json({message:"You can only pick one parameter from id and authorId",
       type:'error',
       })
   }
   //Each one represents one function.
-  if(id){
+  if(postId){
 
     if(sort){
-      try{
-        let result =orderPostByAndSelectById(sort,id)
-        res.json(result)
-      }catch(err){
-        next(err);
-      }
+      res.json({message:"You can use sort when you do query with post id",})
     }
 
     try{
-      let result=selectPostById(id.toString())
+      let result=selectPostById(postId.toString())
       res.json(result)
     }catch(err){
       next(err);
@@ -50,23 +45,28 @@ export function getPosts(req, res, next) {
     }
 
     try{
-      let result=selectPostByAuthorId(authorId)
+      let result=selectPostByAuthorId(authorId.toString())
       res.json(result)
     }catch(err){
       next(err);
     }
   }
 
+  if(sort && !authorId || !postId){
+    try{
+      let result=orderPostsBy(sort)
+      res.json(result)
+    }catch (err){
+      next(err);
+    }
+  }
+
 }
 
-//TODO:Make sure the rest functions can use query and pass the authentication.
 //Post new post
 export function postNewPost(req, res, next) {
   let rawPost =req.body;
-  // let header=req.headers.authorization
-  // let raw=header.split(' ')[1]
-  //
-  // let localId=jwt.decode(raw).id;
+  //Get current user and their ID.
   let localId=req.user.id;
   let post={
     id:getUUID(),
@@ -78,8 +78,6 @@ export function postNewPost(req, res, next) {
     createDate:''
   }
 
-  // post.createDate= Date.now().toString();
-  // console.log({"controller":post});
   if (!post) {
     return res.status(400).send({error: "Post not found"});
   }
@@ -118,8 +116,8 @@ export function updatePostContent(req, res, next) {
 }
 //Delete by post id
 export function deletePostByPostId(req, res, next) {
-  let postId=req.query.id
-  let userId = req.user.id;
+  let postId=req.query.postId
+
   if(!postId){
     res.json(({
       title:"How to delete this post?",
@@ -127,7 +125,6 @@ export function deletePostByPostId(req, res, next) {
       type:"guide"
     }))
   }
-
 
   try{
     deleteByPostId(postId)

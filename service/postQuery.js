@@ -3,8 +3,8 @@ const db = getDB();
 
 //Get the post by author ID
 export function selectPostByAuthorId(authorId){
-    const raw=db.prepare('SELECT * FROM posts WHERE author_id = ?');
-    return raw.get(authorId)
+    const raw=db.prepare('SELECT * FROM posts WHERE authorID= ?');
+    return raw.all(authorId)
 }
 
 export function selectPostById(id) {
@@ -12,16 +12,19 @@ export function selectPostById(id) {
     return raw.get(id);
 }
 
-export function orderPostByAndSelectById(sort,id) {
-    const raw=db.prepare('SELECT * FROM posts WHERE id=? ORDER BY ? LIMIT 20 ASC');
-    return raw.get(id,sort);
+export function selectAuthorIdFromPost(postId) {
+    const raw=db.prepare('SELECT authorID FROM posts WHERE id= ?');
+    return raw.get(postId)
 }
 
 export function orderPostByAndSelectByAuthorId(sort,authorId){
-    const raw=db.prepare('SELECT * FROM posts WHERE author_id=? ORDER BY ? LIMIT 20 ASC');
-    return raw.get(authorId,sort);
+    const raw=db.prepare('SELECT * FROM posts WHERE authorID=? ORDER BY ? LIMIT 20 ASC');
+    return raw.all(authorId,sort);
 }
-
+export function orderPostsBy(sort){
+    const raw=db.prepare('SELECT * FROM posts ORDER BY ? LIMIT 20 DESC ');
+    return raw.all(sort);
+}
 //Update the post
 export function updatePost(postId, postBody){
     // db.exec(`UPDATE posts SET content=${postBody.content} WHERE id = ${postId}`);
@@ -32,7 +35,7 @@ export function updatePost(postId, postBody){
 //Add new post
 export function newPostToDB(authorId, postBody){
     const stmt = db.prepare(`
-    INSERT INTO posts (id, title, content, views, likes, author_id, create_date)
+    INSERT INTO posts (id, title, content, views, likes, authorID, createDate)
     VALUES (?, ?, ?, ?, ?, ?, ?)
 `);
 
@@ -50,8 +53,7 @@ export function newPostToDB(authorId, postBody){
 
 //Delete by author id
 export function deleteByAuthorId(authorId){
-    // db.exec(`DELETE FROM posts WHERE author_id=${id}`);
-    let raw =db.prepare(`DELETE FROM posts WHERE author_id = ?`);
+    let raw =db.prepare(`DELETE FROM posts WHERE authorID= ?`);
     raw.run(authorId);
 
 }

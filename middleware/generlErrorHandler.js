@@ -2,12 +2,12 @@
 import ErrorModel from "../model/ErrorModel.js";
 //Make the error format more neat.
 function createNewErrorObj(err) {
-  var statusCode = err.status;
+  let statusCode = err.status;
   if (!statusCode) {
     statusCode = 500;
   }
   if (!err.message) {
-    err.message = "Someting went wrong!";
+    err.message = "Something went wrong!";
   }
   const newErr = new ErrorModel(err.message, statusCode, "error");
   return newErr;

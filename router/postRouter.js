@@ -2,6 +2,7 @@
 import express from "express";
 import { postNewPost, deletePostByPostId, getPosts} from "../controller/postController.js";
 import {jwtAuthentication} from "../middleware/jwtAuhMiddleware.js";
+import authorizationMiddleware from "../middleware/authorizationMiddleware.js";
 
 const router = express.Router();
 router.get("/", (req, res) => {
@@ -21,7 +22,7 @@ router.post("/post-new-post",jwtAuthentication,postNewPost, (err,next) => {
   }
 })
 //Delete post by post id
-router.delete("/delete-post",jwtAuthentication,deletePostByPostId, (err,next) => {
+router.delete("/delete-post",jwtAuthentication,authorizationMiddleware,deletePostByPostId, (err,next) => {
   if (err) {
     err.status = 404;
     next(err);

@@ -89,8 +89,6 @@ export function userLogin(req, res,next){
    }
 
    signToken(token);
-   verifyToken(token)
-
 }
 
 //Create new user
