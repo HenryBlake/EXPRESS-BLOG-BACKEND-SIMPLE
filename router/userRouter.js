@@ -2,15 +2,13 @@ import express from 'express';
 import {
     changePassword,
     changeUsername,
-    createNewUser,
-    getUsernameByIdTest,
     userRegister
 } from "../controller/userController.js";
 import {jwtAuthentication} from "../middleware/jwtAuhMiddleware.js";
 
 const router = express.Router();
 
-router.use(jwtAuthentication)
+// router.use(jwtAuthentication)
 //Create new user
 router.post("/create-new-user",userRegister,(err,next)=>{
     if(err){

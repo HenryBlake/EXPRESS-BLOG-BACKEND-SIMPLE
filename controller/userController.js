@@ -1,4 +1,3 @@
-// import * as dbQuery from "../service/queryDB.js";
 import {
    insertNewUserToDB,
    updatePassword,

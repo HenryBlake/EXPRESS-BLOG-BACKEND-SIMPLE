@@ -2,13 +2,10 @@ import {
   selectPostByAuthorId,
   updatePost,
   newPostToDB,
-  deleteByAuthorId,
   deleteByPostId,
   selectPostById, orderPostByAndSelectByAuthorId, orderPostsBy, selectAuthorIdFromPost
 } from "../service/postQuery.js";
 import {getUUID} from "../service/uuidService.js";
-import {raw} from "express";
-import jwt from "jsonwebtoken";
 
 //Get the post
 export function getPosts(req, res, next) {
